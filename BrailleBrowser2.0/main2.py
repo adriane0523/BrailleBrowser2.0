@@ -1,10 +1,5 @@
 from pynput import keyboard
 
-
-
-
-
-
 import msvcrt
 import os
 import signal
@@ -19,8 +14,8 @@ import speech_recognition as sr
 from bs4 import BeautifulSoup as soup
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+import threading
 
-import keyboard
 from pyfirmata import Arduino, util
 
 sr.__version__
@@ -89,48 +84,125 @@ def keyboard_listener(engine):
 
             i = i + 1
             """
-               
+        pass
+
+
+class Currrent():
+    def __init__(self, currentURL, start, end):
+        self.currentURL = currentURL
+        self.start = start
+        self.end = end
+        
+
+    def setEnd(self, end):
+        self.end = end
+
+    def setStart(self,start):
+        self.end = start
                     
-
-
-userInput = ""
-
-
-if __name__ == "__main__":
-    driver = webdriver.Chrome(executable_path=r'chromedriver.exe')
-    driver.get("https://www.google.com/")
-
-    if(driver.findElement(By.xpath("//*[@id='someID']")).isDisplayed()){
-    String previousURL = driver.getCurrentUrl();
-    driver.findElement(By.xpath("//*[@id='someID']")).click();  
-    driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-
-    ExpectedCondition e = new ExpectedCondition<Boolean>() {
-          public Boolean apply(WebDriver d) {
-            return (d.getCurrentUrl() != previousURL);
-          }
-        };
-
-    wait.until(e);
-    currentURL = driver.getCurrentUrl();
-    System.out.println(currentURL);
-} 
-sha
-
+current = Currrent("",False,False)
 
 def on_press(key):
     try: k = key.char # single-char keys
     except: k = key.name # other keys
     if key == keyboard.Key.esc: return False # stop listener
 
-    if k in ['shift', 'o']: # keys interested
+    if k in ['f1', 'f2']: # keys interested
         # self.keys.append(k) # store it in global-like variable
         print('Key pressed: ' + k)
 
+    if k == 'f1':
+        current.start = True
+        current.stop = False
+        return False
+
+    if k == 'f2': 
+        current.stop = True
+        current.start = False
+        return False
     
-#lis = keyboard.Listener(on_press=on_press)
-#lis.start() # start to listen on a separate thread
-#lis.join() # no this if main thread is polling self.keyaa122
+
+
+
+def background():
+    last = ""
+    while True:
+        if ((str)(driver.current_url) != last):
+            current.currentURL = (str)(driver.current_url)
+            last = (str)(driver.current_url)
+    
+            
+
+def foreground():
+    lis = keyboard.Listener(on_press=on_press)
+    lis.start() # start to listen on a separate thread
+    lis.join() # no this if main thread is polling self.key
+
+    while True:
+        if (current.start):
+            print("started")
+
+            uClient = urlopen(current.currentURL)
+            page_html = uClient.read()
+            uClient.close()
+
+            page_soup = soup(page_html, "html.parser")
+            container = page_soup.find('body')
+            
+            result = ""
+            
+            for div in container.find_all('div'):
+                result = result + (str)(div.text)
+
+
+
+
+            flag = True
+            start = 0
+            end = 10
+            while(flag):
+
+                for i in range(start,end)):
+                    
+
+                    
+                    
+            
+            result = result.strip(' \n\t')
+            print (result)
+
+    
+        if (current.end):
+            print("ended")
+
+
+
+       
+    
+
+
+
+    
+
+
+if __name__ == "__main__":
+    driver = webdriver.Chrome(executable_path=r'chromedriver.exe')
+    driver.get("https://www.google.com/")
+
+    b = threading.Thread(name='background', target=background)
+    f = threading.Thread(name='foreground', target=foreground)
+
+    b.start()
+    f.start()
+
+   
+
+
+
+
+
+
+
 
 
 def hello():
@@ -183,22 +255,7 @@ def hello():
 
             driver.get(links[(int)(openLink)])
             
-            uClient = urlopen(links[(int)(openLink)])
-            page_html = uClient.read()
-            uClient.close()
-
-            page_soup = soup(page_html, "html.parser")
-            container = page_soup.find('body')
-
-
-            
-            result = ""
-            
-            for div in container.find_all('div'):
-                result = result + (str)(div.text)
-
-            result = result.strip(' \n\t')
-            print (result)
+           
 
             engine.say(result)
             engine.runAndWait()
