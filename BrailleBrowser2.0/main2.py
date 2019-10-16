@@ -18,133 +18,35 @@ import threading
 
 from pyfirmata import Arduino, util
 
+import json
+
 sr.__version__
 
-def arduino(input):
-    board = Arduino("COM10")
-    comment = '''
-    elif (input is "z"):
-        board.digital[13].write(0)
-        board.digital[12].write(1)
-        board.digital[11].write(1)
-        board.digital[10].write(0)
-        board.digital[7].write(0)
-        board.digital[6].write(0)
-    '''    
-    
-def search(keyword, driver):
-    links = []
+ 
 
-    search= driver.find_element_by_name('q')
-    search.send_keys(keyword)
+if __name__ == "__main__":
+    driver = webdriver.Chrome(executable_path=r'chromedriver.exe')
+   # ser = serial.Serial('COM4', 9800, timeout=1)
 
-    opretAnnonce = driver.find_element_by_xpath('//*[@id="tsf"]/div[2]/div/div[3]/center/input[1]')
-    opretAnnonce.send_keys(Keys.RETURN)
-    currentUrl = driver.current_url
-    req = Request(currentUrl, headers={'User-Agent': 'Chrome'})
-    webpage = urlopen(req).read()
-
-    page_soup = soup(webpage, "html.parser")
-    searchResults = page_soup.find_all(id="search")
+  
+    user_input = ""
+    while (user_input != "x"):
+        user_input = input(">")
 
 
-    
-    for item in page_soup.find_all('h3', attrs={'class' : 'r'}):
-        endIndex = getLink(item.a['href'])
-        newLink = item.a['href'][7:endIndex]
-        links.append(newLink)
+        if (user_input == "o"):
 
-    return links
-        
-def repeatLinks(links,engine):
-     for i in range(3):
-        engine.say(links[i])
-        engine.runAndWait()
-
-
-def keyboard_listener(engine):
-    keys = ['a','b','c','d','e','f','g','h','i','j','l','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    while True:  # making a loop
-        i = 0
-        flag = True
-        if keyboard.is_pressed('a'):
-            engine.say('a')
-            break
-
-        
+            driver.get("https://www.google.com/")
+                
+        if ( user_input == "v"):
             
-        
-
-        comment = """
-        while(flag and i < len(keys)):
-            if keyboard.is_pressed(keys[i]):
-                print('You pressed', keys[i])
-                engine.say(keys[i])
-                flag = False
-
-            i = i + 1
-            """
-        pass
-
-
-class Currrent():
-    def __init__(self, currentURL, start, end):
-        self.currentURL = currentURL
-        self.start = start
-        self.end = end
-        
-
-    def setEnd(self, end):
-        self.end = end
-
-    def setStart(self,start):
-        self.end = start
-                    
-current = Currrent("",False,False)
-
-def on_press(key):
-    try: k = key.char # single-char keys
-    except: k = key.name # other keys
-    if key == keyboard.Key.esc: return False # stop listener
-
-    if k in ['f1', 'f2']: # keys interested
-        # self.keys.append(k) # store it in global-like variable
-        print('Key pressed: ' + k)
-
-    if k == 'f1':
-        current.start = True
-        current.stop = False
-        return False
-
-    if k == 'f2': 
-        current.stop = True
-        current.start = False
-        return False
-    
-
-
-
-def background():
-    last = ""
-    while True:
-        if ((str)(driver.current_url) != last):
-            current.currentURL = (str)(driver.current_url)
-            last = (str)(driver.current_url)
-    
             
-
-def foreground():
-    lis = keyboard.Listener(on_press=on_press)
-    lis.start() # start to listen on a separate thread
-    lis.join() # no this if main thread is polling self.key
-
-    while True:
-        if (current.start):
-            print("started")
-
-            uClient = urlopen(current.currentURL)
+           
+            uClient = urlopen((str)(driver.current_url))
             page_html = uClient.read()
             uClient.close()
+
+            
 
             page_soup = soup(page_html, "html.parser")
             container = page_soup.find('body')
@@ -159,150 +61,196 @@ def foreground():
 
             flag = True
             start = 0
-            end = 10
-            while(flag):
+            end = 3
+            result = result.strip(' \n\t')
 
-                for i in range(start,end)):
-                    
+            data = {"letters":[
+                {
+                    "letter": "0",
+                    "shift": 14
+                },
+                {
+                    "letter": "1",
+                    "shift": 1
+                },
+                {
+                    "letter": "2",
+                    "shift": 5
+                },
+                {
+                    "letter": "3",
+                    "shift": 3
+                },
+                {
+                    "letter": "4",
+                    "shift": 11
+                },
+                {
+                    "letter": "5",
+                    "shift": 9
+                },
+                {
+                    "letter": "6",
+                    "shift": 7
+                },
+                {
+                    "letter": "7",
+                    "shift": 15
+                },
+                {
+                    "letter": "8",
+                    "shift": 13
+                },
+                {
+                    "letter": "9",
+                    "shift": 9
+                },
+                {
+                    "letter": "a",
+                    "shift": 1
+                },
+                {
+                    "letter": "b",
+                    "shift": 5
+                },
+                {
+                    "letter": "c",
+                    "shift": 3
+                },
+                {
+                    "letter": "d",
+                    "shift": 11
+                },
+                {
+                    "letter": "e",
+                    "shift": 9
+                },
+                {
+                    "letter": "f",
+                    "shift": 7
+                },
+                {
+                    "letter": "g",
+                    "shift": 15
+                },
+                {
+                    "letter": "h",
+                    "shift": 13
+                },
+                {
+                    "letter": "i",
+                    "shift": 6
+                },
+                {
+                    "letter": "j",
+                    "shift": 14
+                },
+                {
+                    "letter": "k",
+                    "shift": 17
+                },
+                {
+                    "letter": "l",
+                    "shift": 21
+                },
+                {
+                    "letter": "n",
+                    "shift": 27
+                },
+                {
+                    "letter": "o",
+                    "shift": 25
+                },
+                {
+                    "letter": "p",
+                    "shift": 23
+                },
+                {
+                    "letter": "q",
+                    "shift": 31
+                },
+                {
+                    "letter": "r",
+                    "shift": 29
+                },
+                {
+                    "letter": "s",
+                    "shift": 41
+                },
+                {
+                    "letter": "t",
+                    "shift": 30
+                },
+                {
+                    "letter": "u",
+                    "shift": 5
+                },
+                {
+                    "letter": "v",
+                    "shift": 49
+                },
+                {
+                    "letter": "w",
+                    "shift": 46
+                },
+                {
+                    "letter": "x",
+                    "shift": 51
+                },
+                {
+                    "letter": "y",
+                    "shift": 59
+                },
+                {
+                    "letter": "z",
+                    "shift": 61
+                }
+                ]
+            }
+           
 
-                    
+
+            send_b = 0b000000
+            mutiplier = 1
+            while(end < 500):
+                
+                send = ""
+                temp = 0b000000
+                for i in range(start,end):
+                    print(result[i])
+
+                    for c in data["letters"]:
+                        if c["letter"] == result[i]:
+
+                            x = c["shift"]
+                            temp = temp | x
+
+                     
+                    send_b = send_b | temp
+                    send_b = send_b << 6
+                    send = send + result[i] 
+                    temp = 0b000000
+                    time.sleep(1)
+                print("{0:b}".format(send_b))
+                send_b = 0b000000
+                
+
+
+
+               
+
+                start = start + 3
+                end = end + 3
+                send = ""
                     
             
-            result = result.strip(' \n\t')
+            
+          
             print (result)
 
-    
-        if (current.end):
-            print("ended")
 
-
-
-       
-    
-
-
-
-    
-
-
-if __name__ == "__main__":
-    driver = webdriver.Chrome(executable_path=r'chromedriver.exe')
-    driver.get("https://www.google.com/")
-
-    b = threading.Thread(name='background', target=background)
-    f = threading.Thread(name='foreground', target=foreground)
-
-    b.start()
-    f.start()
 
    
 
 
 
-
-
-
-
-
-
-def hello():
-    while (userInput != "x"):
-        
-
-        
-        links = []
-        
-        menu = """
-        type 'v' to use mic
-        type 'c' to use keyboard
-        """
-        print(menu)
-        engine.say(menu)
-        engine.runAndWait()
-
-    
-        userInput = input("> ")
-
-        if (userInput == "q"):
-
-            while(userInput != "@"):
-                userInput = input("> ")
-        
-                arduino(userInput)
-
-
-
-
-        if (userInput == "c"):
-            engine.say("Start typing to search")
-            engine.runAndWait()
-
-            #t1 = threading.Thread(target=keyboard_listener, args=(engine,)) 
-            #t1.start() 
-
-            searchInput= input("> ")
-            links = search(searchInput, driver)
-            search = "searchng " + searchInput
-            engine.say(search)
-            repeatLinks(links,engine)
-
-
-        
-            openLink = input("> ")
-
-            
-
-
-            driver.get(links[(int)(openLink)])
-            
-           
-
-            engine.say(result)
-            engine.runAndWait()
-
-            comment = """
-            for i in result:
-                print(i)
-                arduino(i.lower())
-                engine.say(i)
-                engine.runAndWait()
-                time.sleep(1)
-                """
-                
-
-        
-        if (userInput == "v"):
-            engine.say("Start Talking")
-            engine.runAndWait() 
-            speech = speak(r,mic)
-
-            print(speech[0:6])
-            if (speech[0:6] == "search"):
-
-                search(speech[6:len(speech)], driver)
-                repeatLinks(links,engine)
-                    
-                
-
-            if (speech[0:4] == "open"):
-                number = -1
-                if (speech[5:] == "one"):
-                    number = 1
-                elif (speech[5:] == "two"):
-                    number = 2
-                elif(speech[5:]) == "three":
-                    number = 3 
-                elif(speech[5:] == "four"):
-                    number = 4
-                elif (speech[5:] == "five"):
-                    number = 5
-                
-
-                driver.get(links[number])
-
-                page = urllib2.urlopen(links[number]).read()
-                soup = BeautifulSoup(page)
-                body = soup.find('body')
-                the_contents_of_body_without_body_tags = body.findChildren()
-
-                print(the_contents_of_body_without_body_tags)
