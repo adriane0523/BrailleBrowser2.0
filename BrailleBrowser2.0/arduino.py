@@ -1,13 +1,26 @@
-from pyfirmata import Arduino,util
+import serial
 import time
 
-from Arduino import Arduino
+i =0
+ser = serial.Serial('COM4', 9600)
+#ser.flush()
 
 
-board = Arduino("COM5")
-
-for x in range(5):
-  board.digital[13].write(1)
-  time.sleep(0.2)
-  board.digital[13].write(0)
-  time.sleep(0.2)
+while (True):  
+    # Serial write section
+    setTempCar1 = 1
+    setTempCar2 = 37
+    setTemp1 = str(setTempCar1)
+    setTemp2 = str(setTempCar2)
+    print ("Python value sent: ")
+    print (str.encode(setTemp1))
+    temp = b'11111111'
+    ser.write(chr(5).encode())
+    time.sleep(2) # with the port open, the response will be buffered 
+                  # so wait a bit longer for response here
+    ser.write(chr(1).encode())
+    # Serial read section
+    msg = ser.read(ser.inWaiting()) # read everything in the input buffer
+    print ("Message from arduino: ")
+    print (msg)
+    

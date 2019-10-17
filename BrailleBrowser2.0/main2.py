@@ -6,7 +6,7 @@ import signal
 import threading
 import time
 import webbrowser
-from urllib.request import Request, urlopen
+
 
 import pyttsx3
 import serial
@@ -20,13 +20,10 @@ from pyfirmata import Arduino, util
 
 import json
 
-sr.__version__
-
- 
-
+sr.__version__4
 if __name__ == "__main__":
     driver = webdriver.Chrome(executable_path=r'chromedriver.exe')
-   # ser = serial.Serial('COM4', 9800, timeout=1)
+    
 
   
     user_input = ""
@@ -209,7 +206,7 @@ if __name__ == "__main__":
             }
            
 
-
+            comment = '''
             send_b = 0b000000
             mutiplier = 1
             while(end < 500):
@@ -231,7 +228,7 @@ if __name__ == "__main__":
                     send = send + result[i] 
                     temp = 0b000000
                     time.sleep(1)
-                print("{0:b}".format(send_b))
+            
                 send_b = 0b000000
                 
 
@@ -242,9 +239,11 @@ if __name__ == "__main__":
                 start = start + 3
                 end = end + 3
                 send = ""
-                    
+                '''    
             
+                #print("{0:b}".format(send_b))
             
+          
           
             print (result)
 
