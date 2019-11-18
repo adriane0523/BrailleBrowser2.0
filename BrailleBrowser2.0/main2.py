@@ -20,7 +20,7 @@ from pyfirmata import Arduino, util
 
 import json
 
-sr.__version__4
+
 if __name__ == "__main__":
     driver = webdriver.Chrome(executable_path=r'chromedriver.exe')
     
